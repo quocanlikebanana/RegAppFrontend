@@ -1,0 +1,27 @@
+/* Error Page Styling */
+.error-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8d7da;
+    color: #721c24;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.error-page h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.error-page p {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.error-page i {
+    font-style: italic;
+    color: #721c24;
+}

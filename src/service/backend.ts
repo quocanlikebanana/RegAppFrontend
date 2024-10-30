@@ -20,6 +20,7 @@ class BackendService {
 				'Content-Type': 'application/json',
 			},
 		});
+		console.log(this.backendURL);
 	}
 
 	private async handleRequest<T>(callback: () => Promise<T>): Promise<T> {

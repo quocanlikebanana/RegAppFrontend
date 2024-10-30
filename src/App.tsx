@@ -42,7 +42,7 @@ const router = createBrowserRouter([
 		]
 	}
 ], {
-	basename: '/Register-App/'
+	basename: '/RegAppFrontend/'
 });
 
 function App() {

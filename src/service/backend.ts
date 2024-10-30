@@ -10,7 +10,7 @@ class BackendError extends Error {
 
 // Define the ApiService class
 class BackendService {
-	private readonly backendURL: string = import.meta.env.DEV ? 'http://localhost:3000/api' : "";
+	private readonly backendURL: string = import.meta.env.VITE_BACKEND_URL as string;
 	private axiosInstance: AxiosInstance;
 
 	constructor() {

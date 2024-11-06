@@ -1,13 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
+import { RootState } from '../app/strore';
 
 interface ProtectedRouteProps {
-	protectorFunction: () => boolean;
 	element: JSX.Element;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ protectorFunction, element }) => {
-	return protectorFunction() ? element : <Navigate to="/login" />;
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
+	const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+	return isAuthenticated ? element : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

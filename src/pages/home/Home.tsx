@@ -73,10 +73,10 @@ const Home: React.FC = () => {
 							}} key={user.id}>
 							<Card sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 4 }}>
 								<Avatar sx={{ bgcolor: 'primary.main', width: 56, height: 56, mb: 2 }}>
-									{user.username.charAt(0)}
+									{user.firstName.charAt(0)}
 								</Avatar>
 								<CardContent>
-									<Typography variant="h6">{user.username}</Typography>
+									<Typography variant="h6">{user.firstName}</Typography>
 									<Typography variant="body2" color="textSecondary">
 										{user.email}
 									</Typography>

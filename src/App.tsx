@@ -1,14 +1,16 @@
 import './App.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import ErrorPage from './pages/error/Error';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/home/Home';
-import authService from './service/auth';
 import Register from './pages/register/Register';
-import Login from './pages/login/Login';
+import LoginForm from './pages/login/Login';
 import Layout from './layouts/Layout';
 import InsideLayout from './layouts/SubLayout/InsideLayout';
 import OutsideLayout from './layouts/SubLayout/OutsideLayout';
+import { Provider } from 'react-redux';
+import store from './app/strore';
+import Profile from './pages/profile/Profile';
 
 
 const router = createBrowserRouter([
@@ -28,16 +30,29 @@ const router = createBrowserRouter([
 				path: "/login",
 				element:
 					<OutsideLayout>
-						<Login />
+						<LoginForm />
 					</OutsideLayout>
 			},
 			{
+				// Remember the order of the routes, the protected route should be below the login routes
 				path: "/",
-				element: <ProtectedRoute protectorFunction={() => authService.isAuthenticated()} element={
-					<InsideLayout >
-						<Home />
-					</InsideLayout>
-				} />
+				children: [
+					{
+						path: "/",
+						element: <Home />
+					},
+					{
+						path: "/profile",
+						element: <Profile />
+					}
+				],
+				element:
+					<ProtectedRoute element={
+						<InsideLayout >
+							<Outlet />
+						</InsideLayout>
+					} >
+					</ProtectedRoute>
 			}
 		]
 	}
@@ -47,7 +62,9 @@ const router = createBrowserRouter([
 
 function App() {
 	return (
-		<RouterProvider router={router} />
+		<Provider store={store}>
+			<RouterProvider router={router} />
+		</Provider>
 	);
 }
 

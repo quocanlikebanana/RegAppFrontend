@@ -11,7 +11,7 @@ class BackendError extends Error {
 // Define the ApiService class
 class BackendService {
 	private readonly backendURL: string = import.meta.env.VITE_BACKEND_URL as string;
-	private axiosInstance: AxiosInstance;
+	protected axiosInstance: AxiosInstance;
 
 	constructor() {
 		this.axiosInstance = axios.create({
@@ -20,7 +20,6 @@ class BackendService {
 				'Content-Type': 'application/json',
 			},
 		});
-		console.log(this.backendURL);
 	}
 
 	private async handleRequest<T>(callback: () => Promise<T>): Promise<T> {
@@ -31,7 +30,7 @@ class BackendService {
 			if (isAxiosError(error)) {
 				throw new BackendError(error.response?.data.response || error.message);
 			} else {
-				throw new BackendError(`An unexpected error occurred.`);
+				throw new BackendError(`Something went wrong with the server.`);
 			}
 		}
 	}
@@ -59,4 +58,4 @@ class BackendService {
 
 // Export an instance of ApiService with a base URL
 const backendService = new BackendService();
-export { backendService, BackendError };
+export { backendService, BackendError, BackendService };

@@ -1,181 +1,166 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { TextField, Button, Box, Typography, Alert, CircularProgress, Slide, Grid2, Fade } from '@mui/material';
-import { backendService, BackendError } from '../../service/backend.ts';
-import authService from '../../service/auth';
 import { useNavigate } from 'react-router-dom';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../app/strore';
+import { login } from '../../features/auth/authSlice';
+import { z } from 'zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-// Define the shape of the form data and errors
-interface FormData {
-	username: string;
-	password: string;
-}
 
-interface FormErrors {
-	username?: string;
-	password?: string;
-}
+const formSchema = z.object({
+	email: z.string().email('Invalid email'),
+	password: z.string().min(6, 'Password must be at least 6 characters long'),
+});
 
-const Login: React.FC = () => {
-	const [formData, setFormData] = useState<FormData>({
-		username: '',
-		password: '',
+type FormFields = z.infer<typeof formSchema>;
+
+const LoginForm: React.FC = () => {
+	// API State management
+	const dispatch = useDispatch<AppDispatch>();
+	const { loading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);
+
+	// Form management
+	const {
+		register,
+		handleSubmit,
+		formState: {
+			errors,
+		},
+	} = useForm<FormFields>({
+		resolver: zodResolver(formSchema),
 	});
-	const [formErrors, setFormErrors] = useState<FormErrors>({});
-	const [backendError, setBackendError] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
-	const navigate = useNavigate();
+	const onSubmit: SubmitHandler<FormFields> = async (data) => {
+		await dispatch(
+			login({
+				email: data.email,
+				password: data.password,
+			})
+		);
+	}
 
+	// Navigation
+	const navigate = useNavigate();
 	function handleNavigate() {
 		navigate('/register');
 	}
-
-	async function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		if (validateForm()) {
-			setIsLoading(true);
-			try {
-				const response = await backendService.post('/user/login', formData);
-				const user = response.data as {
-					username: string,
-					email: string,
-				};
-				authService.setUser(user);
-				setBackendError(null);
-				navigate('/');
-			} catch (error) {
-				if (error instanceof BackendError) {
-					setBackendError(error.message);
-				} else {
-					setBackendError('An unexpected error occurred!');
-				}
-			} finally {
-				setIsLoading(false);
-			}
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate('/');
 		}
-	};
-
-	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-		const { name, value } = e.target;
-		setFormData((prevData) => ({
-			...prevData,
-			[name]: value,
-		}));
-	};
-
-	function validateForm(): boolean {
-		const newErrors: FormErrors = {};
-
-		// Username
-		if (!formData.username) newErrors.username = 'Username is required';
-
-		// Password
-		if (!formData.password) newErrors.password = 'Password is required';
-		else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
-
-		setFormErrors(newErrors);
-		return Object.keys(newErrors).length === 0;
-	};
+	}, [isAuthenticated, navigate]);
 
 	return (
 		<Fade in>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}
-			>
+			<form onSubmit={handleSubmit(onSubmit)}>
 				<Box
 					sx={{
-						width: 400,
-						padding: 4,
 						display: 'flex',
-						flexDirection: 'column',
 						alignItems: 'center',
-						boxShadow: 3,
-						borderRadius: 2,
-						backgroundColor: '#fff',
+						justifyContent: 'center',
 					}}
 				>
-					{/* Gradient Title */}
-					<Typography
-						variant="h4"
-						component="h1"
+					<Box
 						sx={{
-							background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-							WebkitBackgroundClip: 'text',
-							WebkitTextFillColor: 'transparent',
-							fontWeight: 'bold',
-							mb: 3,
+							width: 400,
+							padding: 4,
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							boxShadow: 3,
+							borderRadius: 2,
+							backgroundColor: '#fff',
 						}}
 					>
-						Login
-					</Typography>
-
-					{/* Announcement */}
-					<Slide in={isLoading} direction="up" mountOnEnter unmountOnExit>
-						<CircularProgress sx={{ my: 1 }} color='primary' />
-					</Slide>
-					{(backendError) &&
-						<Alert
+						{/* Gradient Title */}
+						<Typography
+							variant="h4"
+							component="h1"
 							sx={{
-								width: '100%',
-								mt: 1,
+								background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+								WebkitBackgroundClip: 'text',
+								WebkitTextFillColor: 'transparent',
+								fontWeight: 'bold',
 								mb: 3,
-							}} severity="error">
-							{backendError}
-						</Alert>
-					}
+							}}
+						>
+							Login
+						</Typography>
 
-					<TextField
-						label="Username"
-						variant="outlined"
-						name="username"
-						value={formData.username}
-						onChange={handleChange}
-						error={Boolean(formErrors.username)}
-						helperText={formErrors.username}
-						fullWidth
-						sx={{ mb: 2 }}
-					/>
-					<TextField
-						label="Password"
-						variant="outlined"
-						name="password"
-						type="password"
-						value={formData.password}
-						onChange={handleChange}
-						error={Boolean(formErrors.password)}
-						helperText={formErrors.password}
-						fullWidth
-						sx={{ mb: 2 }}
-					/>
+						{/* Announcement */}
+						<Slide in={loading} direction="up" mountOnEnter unmountOnExit>
+							<CircularProgress sx={{ my: 1 }} color='primary' />
+						</Slide>
+						{(error) &&
+							<Alert
+								sx={{
+									width: '100%',
+									mt: 1,
+									mb: 3,
+								}} severity="error">
+								{error}
+							</Alert>
+						}
 
-					<Grid2 container spacing={1} width={1}>
-						<Grid2 size={{ xs: 12, sm: 6 }}>
-							<Button variant="contained" color="primary" disabled={isLoading} onClick={handleSubmit} fullWidth
-								sx={{
-									height: "3rem",
-									fontWeight: 'bold',
-								}}>
-								Login
-							</Button>
+						<TextField
+							{...register('email')}
+							label="Email"
+							variant="outlined"
+							name="email"
+							error={Boolean(errors.email != null)}
+							helperText={errors.email?.message}
+							fullWidth
+							sx={{ mb: 2 }}
+						/>
+						<TextField
+							{...register('password')}
+							label="Password"
+							variant="outlined"
+							name="password"
+							type="password"
+							error={Boolean(errors.password != null)}
+							helperText={errors.password?.message}
+							fullWidth
+							sx={{ mb: 2 }}
+						/>
+
+						<Grid2 container spacing={1} width={1}>
+							<Grid2 size={{ xs: 12, sm: 6 }}>
+								<Button
+									type='submit'
+									variant="contained"
+									color="primary"
+									disabled={loading}
+									fullWidth
+									sx={{
+										height: "3rem",
+										fontWeight: 'bold',
+									}}>
+									Login
+								</Button>
+							</Grid2>
+							<Grid2 size={{ xs: 12, sm: 6 }}>
+								<Button
+									variant="outlined"
+									color="primary"
+									disabled={loading}
+									onClick={handleNavigate}
+									fullWidth
+									sx={{
+										height: "3rem",
+										fontWeight: 'bold',
+									}}>
+									Register
+								</Button>
+							</Grid2>
 						</Grid2>
-						<Grid2 size={{ xs: 12, sm: 6 }}>
-							<Button variant="outlined" color="primary" disabled={isLoading} onClick={handleNavigate} fullWidth
-								sx={{
-									height: "3rem",
-									fontWeight: 'bold',
-								}}>
-								Register
-							</Button>
-						</Grid2>
-					</Grid2>
-				</Box>
-			</Box >
+					</Box>
+				</Box >
+			</form>
 		</Fade>
 	);
 };
 
-export default Login;
+export default LoginForm;

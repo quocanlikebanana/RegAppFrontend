@@ -3,8 +3,9 @@ import { LayoutProps } from './Contract';
 import { AppBar, Box, Button, Container, createTheme, CssBaseline, Divider, Drawer, Fade, IconButton, List, ListItem, ListItemButton, ListItemText, Switch, ThemeProvider, Toolbar, Typography } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import beachImage from '../../assets/beach.jpg';
-import authService from '../../service/auth';
-import { useNavigate } from 'react-router-dom';
+import store from '../../app/strore';
+import { logout } from '../../features/auth/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -21,8 +22,11 @@ const InsideLayout: React.FC<LayoutProps> = ({ children }) => {
 	});
 
 	function handleLogout() {
-		authService.removeUser();
+		store.dispatch(logout());
 		navigate('/login');
+	}
+	function handleProfile() {
+		navigate('/profile');
 	}
 
 	function handleToggleColorMode() {
@@ -36,11 +40,16 @@ const InsideLayout: React.FC<LayoutProps> = ({ children }) => {
 	const drawer = (
 		<Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
 			<Typography variant="h6" sx={{ my: 2 }}>
-				Beach Conference 2024
+				<Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+					Beach Conference 2024
+				</Link>
 			</Typography>
 			<Divider />
 			<List>
 				<ListItem disablePadding>
+					<ListItemButton sx={{ textAlign: 'center' }} onClick={handleProfile}>
+						<ListItemText primary="Profile" />
+					</ListItemButton>
 					<ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
 						<ListItemText primary="Logout" />
 					</ListItemButton>
@@ -89,7 +98,9 @@ const InsideLayout: React.FC<LayoutProps> = ({ children }) => {
 								component="div"
 								sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
 							>
-								Beach Conference 2024
+								<Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+									Beach Conference 2024
+								</Link>
 							</Typography>
 
 							<Box sx={{
@@ -108,6 +119,9 @@ const InsideLayout: React.FC<LayoutProps> = ({ children }) => {
 							</Box>
 
 							<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+								<Button sx={{ color: '#fff' }} onClick={handleProfile}>
+									Profile
+								</Button>
 								<Button sx={{ color: '#fff' }} onClick={handleLogout}>
 									Logout
 								</Button>

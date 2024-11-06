@@ -40,7 +40,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_BACKEND_URL: https://registerapp-api.onrender.com/api
+          VITE_BACKEND_URL: https://regappbackend.onrender.com/api
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact

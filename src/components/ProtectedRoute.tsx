@@ -1,15 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { RootState } from '../app/strore';
+import { RootState } from '../app/store';
+import { noAuth } from '../app/env';
 
-interface ProtectedRouteProps {
-	element: JSX.Element;
-}
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
-	const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-	return isAuthenticated ? element : <Navigate to="/login" />;
+const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+	// Route protect from Frontend -> still crackable
+	const isAuthenticated = useSelector((state: RootState) => state.auth.user !== null);
+	return (isAuthenticated || noAuth) ? children : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

@@ -1,0 +1,11 @@
+/* https://tailwindcss.com/docs/using-with-preprocessors#build-time-imports */
+
+/* Replacement for the @tailwind base, ... and more convinient */
+
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+@import "./color.css";
+@import "./font.css";

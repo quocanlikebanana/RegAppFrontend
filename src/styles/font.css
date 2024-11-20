@@ -1,0 +1,123 @@
+@layer utilities {
+
+	/* Title */
+	/* 96px */
+	.font-t-1 {
+		font-size: 6rem;
+		font-family: theme("fontFamily.blackOpsOne");
+	}
+
+	/* 64px */
+	.font-t-2 {
+		font-size: 4rem;
+		font-family: theme("fontFamily.blackOpsOne");
+	}
+
+	/* 40px */
+	.font-t-3 {
+		font-size: 2.5rem;
+		font-family: theme("fontFamily.blackOpsOne");
+	}
+
+	/* 32px */
+	.font-t-4 {
+		font-size: 2rem;
+		font-family: theme("fontFamily.blackOpsOne");
+	}
+
+	/* Heading */
+	/* 64px */
+	.font-h-1 {
+		font-size: 4rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: bold;
+	}
+
+	/* 40px */
+	.font-h-2 {
+		font-size: 2.5rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: bold;
+	}
+
+	/* 32px */
+	.font-h-3 {
+		font-size: 2rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: bold;
+	}
+
+	/* 20px */
+	.font-h-4 {
+		font-size: 1.25rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: bold;
+	}
+
+	/* 16px */
+	.font-h-5 {
+		font-size: 1rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: bold;
+	}
+
+	/* Main */
+	/* 40px */
+	.font-m-1 {
+		font-size: 2.5rem;
+		font-family: theme("fontFamily.bitter");
+	}
+
+	/* 32px */
+	.font-m-2 {
+		font-size: 2rem;
+		font-family: theme("fontFamily.bitter");
+	}
+
+	/* 24px */
+	.font-m-3 {
+		font-size: 1.5rem;
+		font-family: theme("fontFamily.bitter");
+	}
+
+	/* 20px */
+	.font-m-4 {
+		font-size: 1.25rem;
+		font-family: theme("fontFamily.bitter");
+	}
+
+	/* 16px */
+	.font-m-5 {
+		font-size: 1rem;
+		font-family: theme("fontFamily.bitter");
+	}
+
+	/* Small */
+	/* 32px */
+	.font-s-1 {
+		font-size: 2rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: lighter;
+	}
+
+	/* 16px */
+	.font-s-2 {
+		font-size: 1rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: lighter;
+	}
+
+	/* 12px */
+	.font-s-3 {
+		font-size: 0.75rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: lighter;
+	}
+
+	/* 8px */
+	.font-s-4 {
+		font-size: 0.5rem;
+		font-family: theme("fontFamily.bitter");
+		font-weight: lighter;
+	}
+}

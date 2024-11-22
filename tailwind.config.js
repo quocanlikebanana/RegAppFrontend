@@ -71,4 +71,8 @@ export default {
 		}
 	},
 	plugins: [],
+	corePlugins: {
+		// preflight: false,
+	},
+	important: "#root",
 }

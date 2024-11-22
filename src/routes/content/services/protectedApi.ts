@@ -17,20 +17,11 @@ const protectedBaseQuery = fetchBaseQuery({
 	},
 });
 
-// Define a service using a base URL and expected endpoints
+// Create a new empty API with the base query and the reducer path to be injected by groups of APIs.
 const protectedApi = createApi({
 	reducerPath: protectedApiReducerPath,
 	baseQuery: protectedBaseQuery,
-	endpoints: (builder) => ({
-		logout: builder.mutation<void, void>({
-			query: () => ({
-				url: 'auth/logout',
-				method: 'GET',
-			})
-		}),
-	}),
+	endpoints: () => ({}),
 });
 
-// Export hooks for usage in functional components
-export const { useLogoutMutation } = protectedApi;
 export default protectedApi;

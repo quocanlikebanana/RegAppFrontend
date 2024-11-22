@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store.ts';
 import authApi, { AuthResponse, Token } from '../routes/auth/services/authApi.ts';
 import LocalStorageService from '../services/localstorage.service.ts';
-import protectedApi from '../routes/content/services/protectedApi.ts';
+import logoutApi from '../routes/content/services/logout.api.ts';
 
 interface AuthState {
 	user: {
@@ -63,8 +63,8 @@ const authSlice = createSlice({
 				})
 			.addMatcher(
 				(action) =>
-					protectedApi.endpoints.logout.matchFulfilled(action) ||
-					protectedApi.endpoints.logout.matchRejected(action),
+					logoutApi.endpoints.logout.matchFulfilled(action) ||
+					logoutApi.endpoints.logout.matchRejected(action),
 				(state) => {
 					state.user = null;
 					state.token = null;

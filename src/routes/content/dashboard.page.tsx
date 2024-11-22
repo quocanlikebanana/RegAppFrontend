@@ -1,7 +1,12 @@
-// src/components/Dashboard.tsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const DashboardPage: React.FC = () => {
+	const navigate = useNavigate()
+	function handleStartNowClick() {
+		navigate("/work");
+	}
+
 	return (
 		<main className="flex-1 bg-gray-100">
 			{/* Hero Section */}
@@ -53,7 +58,7 @@ const DashboardPage: React.FC = () => {
 					))}
 				</div>
 				<div className="flex justify-center mt-8">
-					<button className="px-6 py-3 bg-purple-500 text-white font-bold rounded-lg shadow-lg hover:bg-purple-600">
+					<button onClick={handleStartNowClick} className="px-6 py-3 bg-purple-500 text-white font-bold rounded-lg shadow-lg hover:bg-purple-600">
 						Start Now
 					</button>
 				</div>
